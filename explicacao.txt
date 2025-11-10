@@ -1,0 +1,56 @@
+A unidade do SENAI está organizando um novo procedimento para controle interno de itens do almoxarifado.
+Esse controle será realizado exclusivamente pelos administrados internos, que já estão acostumados
+
+PRIMERIO COMANDO:
+--> instalar pacotes
+pip install django
+
+INICIALIZAR PROJETO:
+python -m django startproject conf .
+python manage.py startapp almoxarifado
+
+CRIAR TABELA
+python manage.py migrate
+
+CRIAR USUÁRIo:
+python manage.py createsuperuser
+
+SUPERUSER:
+--> Username: belaa
+--> Email address: belaa@gmail.com
+--> Password: 1234
+
+RODAR:
+python manage.py runserver
+--> colocar "/admin" na url
+
+em ALMOXARIFADO/MODELS.PY:
+    nome = models.CharField(max_length=255) # max_lenght = varchar
+    codigo = models.CharField(max_length=255, unique=True) # unique = único
+    quantidade = models.IntegerField() #adicionar um campo de número interio
+    categoria = models. CharField(max_length=255)
+    data = models.DateField(auto_now_add=True) #auto_now_add=True cria a data AUTOMATICAMENTE
+
+APÓS as ALTERAÇÕES:
+--> acessar conf/settings.py e no installed_apps adicionar "almoxarifado" (nome da pasta)
+ python manage.py makemigrations
+ python manage.py migrate        
+
+IR EM ALMOXARIFADO/ADMIN.PY e adicionar:
+from .models import Item
+admin.site.register(Item)
+
+CORRIGIR NOMES:
+IR EM ALMOXARIFADO/MODELS:
+    def __str__(self):
+        return self.nome
+
+ADICIONAR FILTROS:
+IR EM ALMOXARIFADO/ADMIN.PY e adicionar:
+class ItemAdmin(admin.ModelAdmin):
+    list_display = ['nome', 'codigo', 'categoria', 'data']
+    search_fields = ['categoria']
+    list_filter = ['categoria']
+
+admin.site.register(Item, ItemAdmin)
+--> REMOVER admin.site.register(Item)
