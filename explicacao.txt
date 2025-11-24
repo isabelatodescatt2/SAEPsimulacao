@@ -25,6 +25,7 @@ python manage.py runserver
 --> colocar "/admin" na url
 
 em ALMOXARIFADO/MODELS.PY:
+class Item(models.Model):
     nome = models.CharField(max_length=255) # max_lenght = varchar
     codigo = models.CharField(max_length=255, unique=True) # unique = único
     quantidade = models.IntegerField() #adicionar um campo de número interio
@@ -33,15 +34,18 @@ em ALMOXARIFADO/MODELS.PY:
 
 APÓS as ALTERAÇÕES:
 --> acessar conf/settings.py e no installed_apps adicionar "almoxarifado" (nome da pasta)
+
+No terminal:
  python manage.py makemigrations
  python manage.py migrate        
 
-IR EM ALMOXARIFADO/ADMIN.PY e adicionar:
+IR EM ALMOXARIFADO/ADMIN.PY e adicionar no início:
 from .models import Item
+e no fim:
 admin.site.register(Item)
 
-CORRIGIR NOMES:
-IR EM ALMOXARIFADO/MODELS:
+PARA CORRIGIR NOMES:
+IR EM ALMOXARIFADO/MODELS e adicionar no FIM:
     def __str__(self):
         return self.nome
 
@@ -53,4 +57,5 @@ class ItemAdmin(admin.ModelAdmin):
     list_filter = ['categoria']
 
 admin.site.register(Item, ItemAdmin)
---> REMOVER admin.site.register(Item)
+
+--> REMOVER o admin.site.register(Item)
